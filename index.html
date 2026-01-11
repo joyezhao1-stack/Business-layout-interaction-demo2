@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联想控股 - 产业运营与投资 (放大交互版)</title>
+    <style>
+        /* --- 全局样式 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* 定义颜色变量 */
+        :root {
+            --legend-blue: #002e6d; /* 联想深蓝 */
+            --legend-gold: #b89c68; /* 联想金 */
+            --text-grey: #666;
+        }
+
+        /* --- 顶部导航栏 (模拟) --- */
+        header {
+            background: linear-gradient(90deg, #002e6d 30%, #fff 30%);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+        }
+        
+        .top-nav {
+            margin-left: auto;
+            font-size: 12px;
+            color: #666;
+        }
+        .top-nav span { margin: 0 10px; cursor: pointer; }
+
+        /* --- 核心Banner区域 --- */
+        .hero-section {
+            display: flex;
+            height: 350px;
+            /* 模拟雪山背景渐变 */
+            background: linear-gradient(135deg, #002e6d 20%, #aaccff 50%, #ffeedd 100%);
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #002e6d;
+            color: #fff;
+            padding: 40px 30px;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--legend-gold);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            font-size: 13px;
+            line-height: 2.5;
+            color: #aab;
+        }
+        .sidebar .active-link { color: #fff; font-weight: bold; border-left: 2px solid var(--legend-gold); padding-left: 10px; margin-left: -12px;}
+
+        /* --- 中部选项卡 (Tab) --- */
+        .tab-bar {
+            background-color: #002e6d;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 150px;
+            position: relative;
+        }
+
+        .tab-item {
+            color: #8fa0b5;
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .tab-item.active {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background-color: var(--legend-gold);
+        }
+
+        /* --- 主要内容区域 --- */
+        .main-content {
+            background: linear-gradient(to bottom, #dcecf8 0%, #fff 100%);
+            padding: 60px 10%;
+            min-height: 500px;
+        }
+
+        .intro-text {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 60px;
+        }
+        
+        .text-block {
+            width: 60%;
+            border-left: 1px solid #ccc;
+            padding-left: 40px;
+        }
+
+        .text-block h3 {
+            font-size: 28px;
+            color: #002e6d;
+            margin-bottom: 20px;
+        }
+
+        .text-block p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        /* --- 交互区域样式 (卡片与列表) --- */
+        .display-area {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .display-area.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 类型1：网格布局 (产业运营 - 图1) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background-color: #ccc;
+            border: 1px solid #ccc;
+        }
+
+        .card-box {
+            background-color: #f9f9f9;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            /* 移除旧的背景色transition */
+            /* transition: all 0.3s ease; */ 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 220px;
+            overflow: hidden; /* 防止放大溢出 */
+        }
+
+        /* 模拟Logo文字 */
+        .mock-logo {
+            font-size: 30px;
+            font-weight: 900;
+            font-style: italic;
+            color: #002e6d;
+            margin-bottom: 15px;
+            /* 添加 transform transition 以实现平滑放大 */
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: var(--legend-gold);
+            margin-bottom: 10px;
+            /* 添加 transform transition 以实现平滑放大 */
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .card-link {
+            font-size: 12px;
+            color: #999;
+            text-decoration: none;
+            /* 添加 transform transition 以实现平滑放大 */
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- 【修改后的】交互效果核心代码 (图1) --- */
+        /* 鼠标悬浮在盒子上时，内部元素放大 */
+        .card-box:hover .mock-logo,
+        .card-box:hover .card-title,
+        .card-box:hover .card-link {
+            /* 核心：放大 1.1 倍 */
+            transform: scale(1.1);
+        }
+
+
+        /* 类型2：列表布局 (产业孵化 - 图2) */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+        }
+
+        .list-row {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 30px 40px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            /* 移除旧的背景色transition */
+            /* transition: all 0.3s ease; */
+            overflow: hidden; /* 防止放大溢出 */
+        }
+        .list-row:last-child { border-bottom: none; }
+
+        .row-icon {
+            font-size: 40px;
+            margin-right: 20px;
+            color: #002e6d;
+            width: 60px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            height: 60px;
+            line-height: 55px;
+            /* 添加 transform transition */
+            transition: transform 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .row-text {
+            width: 250px;
+             /* 添加 transform transition 用于整体放大 */
+            transition: transform 0.3s ease;
+        }
+        .row-text h4 {
+            font-size: 20px;
+            color: var(--legend-gold);
+            margin-bottom: 5px;
+        }
+        .row-text p {
+            font-size: 12px;
+            color: #999;
+        }
+        .row-text span {
+             font-size: 12px;
+             color: #ccc;
+             display: block;
+             margin-top: 5px;
+        }
+
+        .row-logos {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 40px;
+            align-items: center;
+             /* 添加 transform transition 用于整体放大 */
+             transition: transform 0.3s ease;
+        }
+        
+        .mock-logo-small {
+            font-size: 20px;
+            font-weight: bold;
+            color: #002e6d;
+        }
+
+        /* --- 【修改后的】交互效果核心代码 (图2) --- */
+        /* 鼠标悬浮在行上时，内部主要元素放大 */
+        .list-row:hover .row-icon,
+        .list-row:hover .row-text,
+        .list-row:hover .row-logos {
+             /* 核心：列表项放大稍微小一点，1.05倍比较合适 */
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="color:white; font-size:24px; font-weight:bold;">LEGEND HOLDINGS <span style="font-size:12px; font-weight:normal;">联想控股</span></div>
+        <div class="top-nav">
+            <span>关于我们</span> <span>业务布局</span> <span>公司资讯</span> <span>投资者关系</span> <span>加入我们</span>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="sidebar">
+            <h2>业务布局</h2>
+            <div style="font-size:16px; font-weight:bold; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px;">产业运营</div>
+            <ul>
+                <li class="active-link">> 联想集团</li> <li>> 联泓新科</li> <li>> 佳沃集团</li> <li>> 卢森堡国际银行</li>
+            </ul>
+            <div style="margin-top:20px; font-size:14px; opacity:0.7;">产业孵化与投资</div>
+            <ul>
+                <li>> 上市公司</li> <li>> 基金管理公司</li> <li>> 非上市公司</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-bar">
+        <div class="tab-item active" onclick="switchTab('operation', this)">产业运营</div>
+        <div class="tab-item" onclick="switchTab('incubation', this)">产业孵化与投资</div>
+    </div>
+
+    <div class="main-content">
+
+        <div id="view-operation" class="display-area active">
+            <div class="intro-text">
+                <div class="text-block">
+                    <h3>产业运营</h3>
+                    <p>联想控股为大股东，通过切实的资源配置、有效的管控模式和广泛的赋能提升，与优秀领军人才深度合作，共同巩固其行业地位，深化企业的核心竞争力，以打造公司的产业支柱，为股东创造长期、稳健的回报。</p>
+                </div>
+            </div>
+
+            <div class="grid-container">
+                <div class="card-box">
+                    <div class="mock-logo">Lenovo</div>
+                    <div class="card-title">联想集团</div>
+                    <a href="#" class="card-link">>> 了解更多</a>
+                </div>
+                <div class="card-box">
+                    <div class="mock-logo">levima</div>
+                    <div class="card-title">联泓新科</div>
+                    <a href="#" class="card-link">>> 了解更多</a>
+                </div>
+                <div class="card-box">
+                    <div class="mock-logo">JOYVIO</div>
+                    <div class="card-title">佳沃集团</div>
+                    <a href="#" class="card-link">>> 了解更多</a>
+                </div>
+                <div class="card-box">
+                    <div class="mock-logo">BIL</div>
+                    <div class="card-title">卢森堡国际银行</div>
+                    <a href="#" class="card-link">>> 了解更多</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-incubation" class="display-area">
+             <div class="intro-text">
+                <div class="text-block">
+                    <h3>产业孵化与投资</h3>
+                    <p>联想控股面向创业或成长期企业，通过孵化或直接与间接投资，以股权资本、金融支持、管理顾问资源等多种方式，支持实体经济，特别是科技创新企业的发展。</p>
+                </div>
+            </div>
+
+            <div class="list-container">
+                <div class="list-row">
+                    <div class="row-icon">⚓</div>
+                    <div class="row-text">
+                        <h4>上市公司</h4>
+                        <p>包含富瀚微、拉卡拉、东航物流。</p>
+                        <span>>> 了解更多</span>
+                    </div>
+                    <div class="row-logos">
+                        <div class="mock-logo-small">Fulhan</div>
+                        <div class="mock-logo-small">拉卡拉</div>
+                        <div class="mock-logo-small">EAL</div>
+                    </div>
+                </div>
+
+                <div class="list-row">
+                    <div class="row-icon">🏛</div>
+                    <div class="row-text">
+                        <h4>基金管理公司</h4>
+                        <p>包含君联资本、联想之星、弘毅投资。</p>
+                        <span>>> 了解更多</span>
+                    </div>
+                    <div class="row-logos">
+                        <div class="mock-logo-small">君联资本</div>
+                        <div class="mock-logo-small">联想之星</div>
+                        <div class="mock-logo-small">HONY</div>
+                    </div>
+                </div>
+
+                <div class="list-row">
+                    <div class="row-icon">🏢</div>
+                    <div class="row-text">
+                        <h4>非上市公司</h4>
+                        <p>包含正奇控股、融资租赁、上海德济医院等。</p>
+                        <span>>> 了解更多</span>
+                    </div>
+                    <div class="row-logos">
+                        <div class="mock-logo-small">ZQET</div>
+                        <div class="mock-logo-small">JC FINANCE</div>
+                        <div class="mock-logo-small">Raycom</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(viewName, element) {
+            var tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(function(tab) { tab.classList.remove('active'); });
+            element.classList.add('active');
+
+            var opView = document.getElementById('view-operation');
+            var incView = document.getElementById('view-incubation');
+
+            if (viewName === 'operation') {
+                opView.classList.add('active');
+                incView.classList.remove('active');
+            } else {
+                opView.classList.remove('active');
+                incView.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
